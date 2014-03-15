@@ -25,7 +25,7 @@ import re
 import xml.etree.ElementTree as ET
 
 class Fanzub(Indexer):
-    version = "0.3"
+    version = "0.4"
     identifier = "de.lad1337.fanzub"
     types = ['de.lad1337.nzb']
     addMediaTypeOptions = "runFor"
@@ -42,6 +42,9 @@ class Fanzub(Indexer):
         downloads = []
         terms = element.getSearchTerms()
         for term in terms:
+            term = term.replace('Episode', '')
+            term = re.sub('\se\d{1,2}\s', '', term)
+
             payload['q'] = term
             r = requests.get("http://fanzub.com/rss", params=payload)
             log("Fanzub final search for term %s url %s" % (term, r.url))
